@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { getApiBaseUrl } from '../config/api';
 
 const router = Router();
 
@@ -26,14 +27,6 @@ const workouts = [
   { id: 'workout-1', name: 'Morning Mobility', duration: 20, level: 'easy' },
   { id: 'workout-2', name: 'Power Intervals', duration: 35, level: 'hard' }
 ];
-
-function getApiBaseUrl(): string {
-  const codespaceName = process.env.CODESPACE_NAME;
-
-  return codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev`
-    : 'http://localhost:8000';
-}
 
 function createResourceRouter<T extends { id: string }>(resource: T[], resourceName: string) {
   const resourceRouter = Router();

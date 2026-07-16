@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const api_1 = require("../config/api");
 const router = (0, express_1.Router)();
 const users = [
     { id: 'user-1', name: 'Ava', email: 'ava@example.com', role: 'runner' },
@@ -22,12 +23,6 @@ const workouts = [
     { id: 'workout-1', name: 'Morning Mobility', duration: 20, level: 'easy' },
     { id: 'workout-2', name: 'Power Intervals', duration: 35, level: 'hard' }
 ];
-function getApiBaseUrl() {
-    const codespaceName = process.env.CODESPACE_NAME;
-    return codespaceName
-        ? `https://${codespaceName}-8000.app.github.dev`
-        : 'http://localhost:8000';
-}
 function createResourceRouter(resource, resourceName) {
     const resourceRouter = (0, express_1.Router)();
     resourceRouter.get(['/', '/'], (_req, res) => {
@@ -44,7 +39,7 @@ router.get('/health', (_req, res) => {
     res.json({ status: 'ok', service: 'octofit-backend' });
 });
 router.get('/config', (_req, res) => {
-    const apiBaseUrl = getApiBaseUrl();
+    const apiBaseUrl = (0, api_1.getApiBaseUrl)();
     res.json({ apiBaseUrl, port: 8000, codespaces: Boolean(process.env.CODESPACE_NAME) });
 });
 router.use('/users', createResourceRouter(users, 'user'));
