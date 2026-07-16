@@ -22,6 +22,12 @@ const workouts = [
     { id: 'workout-1', name: 'Morning Mobility', duration: 20, level: 'easy' },
     { id: 'workout-2', name: 'Power Intervals', duration: 35, level: 'hard' }
 ];
+function getApiBaseUrl() {
+    const codespaceName = process.env.CODESPACE_NAME;
+    return codespaceName
+        ? `https://${codespaceName}-8000.app.github.dev`
+        : 'http://localhost:8000';
+}
 function createResourceRouter(resource, resourceName) {
     const resourceRouter = (0, express_1.Router)();
     resourceRouter.get(['/', '/'], (_req, res) => {
@@ -38,11 +44,8 @@ router.get('/health', (_req, res) => {
     res.json({ status: 'ok', service: 'octofit-backend' });
 });
 router.get('/config', (_req, res) => {
-    const codespaceName = process.env.CODESPACE_NAME;
-    const apiBaseUrl = codespaceName
-        ? `https://${codespaceName}-8000.app.github.dev`
-        : 'http://localhost:8000';
-    res.json({ apiBaseUrl, port: 8000 });
+    const apiBaseUrl = getApiBaseUrl();
+    res.json({ apiBaseUrl, port: 8000, codespaces: Boolean(process.env.CODESPACE_NAME) });
 });
 router.use('/users', createResourceRouter(users, 'user'));
 router.use('/teams', createResourceRouter(teams, 'team'));

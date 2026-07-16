@@ -27,6 +27,14 @@ const workouts = [
   { id: 'workout-2', name: 'Power Intervals', duration: 35, level: 'hard' }
 ];
 
+function getApiBaseUrl(): string {
+  const codespaceName = process.env.CODESPACE_NAME;
+
+  return codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev`
+    : 'http://localhost:8000';
+}
+
 function createResourceRouter<T extends { id: string }>(resource: T[], resourceName: string) {
   const resourceRouter = Router();
 
@@ -48,12 +56,9 @@ router.get('/health', (_req, res) => {
 });
 
 router.get('/config', (_req, res) => {
-  const codespaceName = process.env.CODESPACE_NAME;
-  const apiBaseUrl = codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev`
-    : 'http://localhost:8000';
+  const apiBaseUrl = getApiBaseUrl();
 
-  res.json({ apiBaseUrl, port: 8000 });
+  res.json({ apiBaseUrl, port: 8000, codespaces: Boolean(process.env.CODESPACE_NAME) });
 });
 
 router.use('/users', createResourceRouter(users, 'user'));

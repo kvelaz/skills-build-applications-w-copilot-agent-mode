@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import apiRoutes from './routes/api';
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = Number(process.env.PORT || 8000);
 const mongodbUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit_db';
 
 app.use(express.json());
@@ -13,7 +13,7 @@ mongoose
   .connect(mongodbUri)
   .then(() => {
     console.log('MongoDB connected');
-    app.listen(port, () => {
+    app.listen(port, '0.0.0.0', () => {
       console.log(`Backend listening on port ${port}`);
     });
   })

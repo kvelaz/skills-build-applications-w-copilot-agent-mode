@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const api_1 = __importDefault(require("./routes/api"));
 const app = (0, express_1.default)();
-const port = process.env.PORT || 8000;
+const port = Number(process.env.PORT || 8000);
 const mongodbUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit_db';
 app.use(express_1.default.json());
 app.use('/api', api_1.default);
@@ -15,7 +15,7 @@ mongoose_1.default
     .connect(mongodbUri)
     .then(() => {
     console.log('MongoDB connected');
-    app.listen(port, () => {
+    app.listen(port, '0.0.0.0', () => {
         console.log(`Backend listening on port ${port}`);
     });
 })
