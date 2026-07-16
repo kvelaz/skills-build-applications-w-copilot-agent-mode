@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { buildApiUrl } from '../utils/api';
 
 function Leaderboard() {
   const [scores, setScores] = useState([]);
@@ -9,7 +8,11 @@ function Leaderboard() {
   useEffect(() => {
     async function loadLeaderboard() {
       try {
-        const response = await fetch(buildApiUrl('leaderboard'));
+        const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+        const apiUrl = codespaceName
+          ? `https://${codespaceName}-8000.app.github.dev/api/leaderboard/`
+          : 'http://localhost:8000/api/leaderboard/';
+        const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error('Unable to load leaderboard');
         }
